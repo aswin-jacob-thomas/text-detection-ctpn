@@ -71,14 +71,14 @@ def main(im=None):
         with tf.compat.v1.Session(config=tf.compat.v1.ConfigProto(allow_soft_placement=True)) as sess:
             ckpt_state = tf.train.get_checkpoint_state(checkpoint_path)
             model_path = os.path.join(checkpoint_path, os.path.basename(ckpt_state.model_checkpoint_path))
-            print('Restore from {}'.format(model_path))
+            # print('Restore from {}'.format(model_path))
             saver.restore(sess, model_path)
 
             # im_fn_list = get_images()
             # for im_fn in im_fn_list:
             # print('===============')
             # print(im_fn)
-            start = time.time()
+            # start = time.time()
             # try:
             #     im = cv2.imread(im_fn)[:, :, ::-1]
             # except:
@@ -100,8 +100,8 @@ def main(im=None):
             boxes = textdetector.detect(textsegs, scores[:, np.newaxis], img.shape[:2])
             boxes = np.array(boxes, dtype=np.int)
 
-            cost_time = (time.time() - start)
-            print("cost time: {:.2f}s".format(cost_time))
+            # cost_time = (time.time() - start)
+            # print("cost time: {:.2f}s".format(cost_time))
 
             # for i, box in enumerate(boxes):
             #     cv2.polylines(img, [box[:8].astype(np.int32).reshape((-1, 1, 2))], True, color=(0, 255, 0),
@@ -113,11 +113,7 @@ def main(im=None):
             for i, box in enumerate(boxes):
                 box[0] = box[0] / rh
                 box[2] = box[2] / rh
-                box[4] = box[4] / rh
-                box[6] = box[6] / rh
                 box[1] = box[1] / rw
-                box[3] = box[3] / rw
-                box[5] = box[5] / rw
                 box[7] = box[7] / rw
                 return_array.append([box[0], box[1], box[2], box[7]])
                 # print(return_array)
