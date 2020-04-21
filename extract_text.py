@@ -2,10 +2,15 @@ from PIL import Image, ImageOps
 import numpy as np 
 import pytesseract
 
+from skimage import io
+from skimage import filters
+# from matplotlib import pyplot as plt
+
 def extract(img, bbox_list):
     custom_oem_psm_config = r'--psm 6'
     data = []
     paired = get_item_amount(bbox_list)
+    # img = ImageOps.grayscale(img)
     
     for bbox_pairs in paired:
         bbox_pairs = sorted(bbox_pairs, key=lambda x: x[0])
@@ -16,8 +21,21 @@ def extract(img, bbox_list):
             img_copy = img.copy()
             img_copy = img_copy.crop(bbox)
 
-            # new_im = ImageOps.expand(img_copy, border=5, fill=(255,255,255))
-            new_im = img_copy
+            new_im = ImageOps.expand(img_copy, border=(2,3), fill=(255,255,255))
+
+            # im = io.imread(img)
+            
+            # img.show()
+            # im = np.array(img)
+            # print(im.shape)
+            # block_size = 35
+            # binary_adaptive = filters.threshold_local(im, block_size, offset=10)
+            # # io.imshow(binary_adaptive)
+            # # plt.show()
+            # new_im = Image.fromarray(binary_adaptive).show()
+
+
+            # new_im = img_copy
 
             # new_im.show()
             a = pytesseract.image_to_string(new_im, config=custom_oem_psm_config)
@@ -52,7 +70,7 @@ def get_item_amount(bbox_list):
         first_box = bbox_list[i-1]
         second_box = bbox_list[i]
 
-        if abs(first_box[1] - second_box[1]) <= 5:
+        if abs(first_box[1] - second_box[1]) <= 10:
             groups[i] = groups[i-1]
             paired_bbox_list[groups[i]].append(second_box)
         else:
