@@ -2,8 +2,9 @@ from PIL import Image, ImageOps
 import numpy as np 
 import pytesseract
 
-from skimage import io
-from skimage import filters
+# from skimage import io
+# from skimage import filters
+import re
 # from matplotlib import pyplot as plt
 
 def extract(img, bbox_list):
@@ -41,6 +42,19 @@ def extract(img, bbox_list):
             a = pytesseract.image_to_string(new_im, config=custom_oem_psm_config)
             new_pair.append(a)
         data.append(new_pair)
+    
+    return_result = []
+    for d in data:
+        item = d[0]
+        value = d[1]
+        p = '^\s*\$?\s*[\d|\s]+.?,?\s*\d*\s*$'
+        if re.match(p, value):
+            value = value.replace(' ', '').replace(',','').replace('.','')
+            l = len(value)-2
+            value = value[:l] + '.'+ value[l:]
+            return_result.append({item: value})
+    
+    return return_result
     
     # for d in data:
     #     if len(d) == 1:
