@@ -8,7 +8,10 @@ def extract(img, bbox_list):
     paired = get_item_amount(bbox_list)
     
     for bbox_pairs in paired:
+        bbox_pairs = sorted(bbox_pairs, key=lambda x: x[0])
         new_pair = [] 
+        if len(bbox_pairs) != 2:
+            continue
         for bbox in bbox_pairs:
             img_copy = img.copy()
             img_copy = img_copy.crop(bbox)
@@ -20,6 +23,16 @@ def extract(img, bbox_list):
             a = pytesseract.image_to_string(new_im, config=custom_oem_psm_config)
             new_pair.append(a)
         data.append(new_pair)
+    
+    # for d in data:
+    #     if len(d) == 1:
+    #     elif len(d) == 2:
+    #         possible_value = d[1]
+    #         item = d[0]
+    #         try:
+    #             possible_value = float(possible_value)
+    #         except:
+
     return data
 
 def get_item_amount(bbox_list):
@@ -46,7 +59,7 @@ def get_item_amount(bbox_list):
             j += 1
             groups[i] = j
             paired_bbox_list.append([second_box])
-
+    
     return paired_bbox_list
     
 
