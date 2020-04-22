@@ -16,7 +16,7 @@ def extract(img, bbox_list):
     for bbox_pairs in paired:
         bbox_pairs = sorted(bbox_pairs, key=lambda x: x[0])
         new_pair = [] 
-        if len(bbox_pairs) != 2:
+        if len(bbox_pairs) >=2:
             continue
         for bbox in bbox_pairs:
             img_copy = img.copy()
@@ -45,16 +45,27 @@ def extract(img, bbox_list):
     
     return_result = []
     for d in data:
-        item = d[0]
-        value = d[1]
-        p = '^\s*\$?\s*[\d|\s]+.?,?\s*\d*\s*$'
-        if re.match(p, value):
-            value = value.replace(' ', '').replace(',','').replace('.','')
-            l = len(value)-2
-            value = value[:l] + '.'+ value[l:]
-            regex_for_item = re.compile('[^a-zA-Z0-9\s]')
-            item = regex_for_item.sub('', item)
-            return_result.append({item: value})
+
+        if len(d) == 1:
+            split_data = d.split()
+            possible_value = split_data[-1]
+            regex_for_possible_value = '\d+.\d+'
+            if re.match(regex_for_possible_value, possible_value):
+                item = [' '.join(split_data[k]) for k in range(len(split_data)-1)]
+                value = possible_value
+                return_result.append({item:value})
+        else:
+            item = d[0]
+            value = d[1]
+            p = '^\s*\$?\s*[\d|\s]+.?,?\s*\d*\s*$'
+            if re.match(p, value):
+                value = value.replace(' ', '').replace(',','').replace('.','')
+                l = len(value)-2
+                value = value[:l] + '.'+ value[l:]
+                regex_for_item = re.compile('[^a-zA-Z0-9\s]')
+                item = regex_for_item.sub('', item)
+                if len(item) !=0:
+                    return_result.append({item: value})
     
     return return_result
     
