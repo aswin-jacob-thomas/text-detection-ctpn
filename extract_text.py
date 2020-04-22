@@ -70,7 +70,7 @@ def extract(img, bbox_list):
             img_copy = img.copy()
             img_copy = img_copy.crop(bbox)
 
-            new_im = ImageOps.expand(img_copy, border=(2,3), fill=(255))
+            new_im = ImageOps.expand(img_copy, border=(2,3), fill=(255,255,255))
 
             a = pytesseract.image_to_string(new_im, config=custom_oem_psm_config)
             new_pair.append(a)
