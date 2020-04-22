@@ -4,7 +4,11 @@ import cv2
 from main import demo
 from PIL import Image
 import extract_text
+from flask import Flask
+from flask_cors import CORS
+
 api = Flask(__name__)
+CORS(api)
 
 @api.route('/detect', methods=['GET'])
 def get_pages():

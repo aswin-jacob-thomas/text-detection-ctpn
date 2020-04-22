@@ -9,3 +9,4 @@ Cython==0.29.15
 pytesseract==0.3.4   
 pillow==7.0.0 
 flask==1.1.2 
+flask-cors==3.0.8
