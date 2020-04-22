@@ -20,4 +20,4 @@ def post_pages():
     return json.dumps({'Success':text})
 
 if __name__ == '__main__':
-  api.run(host='0.0.0.0', port=8080)
+  api.run(host='0.0.0.0', port=8080, debug=True)
