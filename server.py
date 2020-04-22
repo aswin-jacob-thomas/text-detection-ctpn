@@ -16,8 +16,8 @@ def post_pages():
     img = cv2.imdecode(numpy.frombuffer(request.files['file'].read(), numpy.uint8), cv2.IMREAD_UNCHANGED)
     bb = demo.main(img[:, :, ::-1])
     im_pil = Image.fromarray(img)
-    text = extract_text.extract(im_pil, bb)
-    return json.dumps({'Success':text})
+    total, text = extract_text.extract(im_pil, bb)
+    return json.dumps({'status':'SUCCESS','total':total, 'items':text})
 
 if __name__ == '__main__':
   api.run(host='0.0.0.0', port=8080, debug=True)
