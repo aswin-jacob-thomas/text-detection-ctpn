@@ -52,6 +52,8 @@ def extract(img, bbox_list):
             value = value.replace(' ', '').replace(',','').replace('.','')
             l = len(value)-2
             value = value[:l] + '.'+ value[l:]
+            regex_for_item = re.compile('[^a-zA-Z0-9\s]')
+            item = regex_for_item.sub('', item)
             return_result.append({item: value})
     
     return return_result
